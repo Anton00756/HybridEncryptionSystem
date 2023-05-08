@@ -2,12 +2,14 @@ import math
 import base64
 
 
-def left_shift(x: int, n: int) -> int:
-    return (x << n & (2 ** x.bit_length() - 1)) | (x >> (x.bit_length() - n))
+def left_shift(x: int, n: int, length: int) -> int:
+    n = n % length
+    return (x << n & (2 ** length - 1)) | (x >> (length - n))
 
 
-def right_shift(x: int, n: int) -> int:
-    return (x >> n) | ((x & (2 ** n - 1)) << (x.bit_length() - n))
+def right_shift(x: int, n: int, length: int) -> int:
+    n = n % length
+    return (x >> n) | ((x & (2 ** n - 1)) << (length - n))
 
 
 class RC6:
@@ -18,6 +20,9 @@ class RC6:
         :param b: длина ключа в байтах [0..255]
         """
         self.__block_length = w if w in {16, 32, 64} else 32
+        self.__block_count = self.__block_length >> 1
+        self.__block_size = self.__block_count >> 2
+        self.__mod_value = 2 ** self.__block_length - 1
         self.__rounds = max(min(255, r), 0)
         self.__key_length = max(min(255, b - b % 8), 0)
         self.__keys = None
@@ -32,44 +37,58 @@ class RC6:
         word_byte_length = self.__block_length // 8
         if self.__key_length % word_byte_length:
             key = b'\x00' * (word_byte_length - (self.__key_length % word_byte_length)) + key
-        words = [key[i: i + word_byte_length] for i in range(0, len(key), word_byte_length)] if self.__key_length else \
-            [0]
+        words = [int.from_bytes(key[i: i + word_byte_length], byteorder='big')
+                 for i in range(0, len(key), word_byte_length)] if self.__key_length else [0]
 
         self.__keys = [p]
-        for i in range(1, 2 * (self.__rounds + 1)):
+        double_rounds = 2 * (self.__rounds + 2)
+        for i in range(1, double_rounds):
             self.__keys.append(self.__keys[-1] + q)
 
-        double_rounds = 2 * (self.__rounds + 1)
         g = h = i = j = 0
         for runner in range(3 * max(len(words), double_rounds)):
-            g = self.__keys[i] = (self.__keys[i] + g + h) << 3
-            h = self.__keys[j] = (int.from_bytes(words[j], byteorder='big') + g + h) << (g + h)
+            g = self.__keys[i] = left_shift((self.__keys[i] + g + h), 3, self.__block_length)
+            h = words[j] = left_shift(words[j] + g + h, g + h, self.__block_length)
             i = (j + 1) % double_rounds
             j = (j + 1) % len(words)
 
-        # for i in range(len(words)):
-        #     words[i] = int.from_bytes(key[i:i + word_byte_length], 'big')
+    def encrypt(self, data: bytes) -> bytes:
+        if len(data) != self.__block_count:
+            raise ValueError("Некорректная длина данных!")
+        a, b, c, d = [int.from_bytes(data[i:i + self.__block_size], byteorder='big')
+                      for i in range(0, self.__block_count, self.__block_size)]
+        b = (b + self.__keys[0]) & self.__mod_value
+        d = (d + self.__keys[1]) & self.__mod_value
+        logarithm = int(math.log10(self.__block_length))
+        for i in range(1, self.__rounds + 1):
+            t = left_shift((b * (2 * b + 1)) & self.__mod_value, logarithm, self.__block_length)
+            u = left_shift((d * (2 * d + 1)) & self.__mod_value, logarithm, self.__block_length)
+            a = (left_shift(a ^ t, u, self.__block_length) + self.__keys[2 * i]) & self.__mod_value
+            c = (left_shift(c ^ u, t, self.__block_length) + self.__keys[2 * i + 1]) & self.__mod_value
+            a, b, c, d = b, c, d, a
+        a = (a + self.__keys[-2]) & self.__mod_value
+        c = (c + self.__keys[-1]) & self.__mod_value
+        return a.to_bytes(self.__block_size, 'big') + b.to_bytes(self.__block_size, 'big') + \
+            c.to_bytes(self.__block_size, 'big') + d.to_bytes(self.__block_size, 'big')
 
+    def minus_modulo(self, a, b):
+        return a - b & self.__mod_value
 
-        # # Формирование раундового ключа
-        # self.__keys = [p]  # Раундовый ключ длиной в 2r+4
-        # c = int(8 * self.__key_length / self.__block_length)  # число слов в ключе
-        # # Преобразование ключа в массив из с слов
-        # words = []
-        # for i in range(c):
-        #     words.append(int("0b" + Key_bit[i:i + w], 2))
-        # for i in range(2 * self.__rounds + 4 - 1):  # Инициализация массива раундовых ключей
-        #     self.__keys.append((self.__keys[-1] + q) % (2 ** self.__block_length))
-
-        # self.__keys = []
-        # for i in range(self.__key_length - 1, -1, -1):
-        #     self.__keys.append()
-        '''
-        c = [max(b, 1) / u]
-for b - 1 downto 0 do
-	L[i/u] = (L[i/u]<<<8) + K[i]
-	
-	На этом этапе нужно скопировать секретный ключ из массиваK[0...b-1]
-	в массив L[0...c-1], который состоит из c=b/u слов, где u=w/8-количество байт в слове. 
-	Если   b не кратен w / 8, то Lдополняется нулевыми битами до ближайшего большего кратного:
-        '''
+    def decrypt(self, data) -> bytes:
+        if len(data) != self.__block_count:
+            raise ValueError("Некорректная длина данных!")
+        a, b, c, d = [int.from_bytes(data[i:i + self.__block_size], byteorder='big')
+                      for i in range(0, self.__block_count, self.__block_size)]
+        a = self.minus_modulo(a, self.__keys[-2])
+        c = self.minus_modulo(c, self.__keys[-1])
+        logarithm = int(math.log10(self.__block_length))
+        for i in range(self.__rounds, 0, -1):
+            a, b, c, d = d, a, b, c
+            t = left_shift((b * (2 * b + 1)) & self.__mod_value, logarithm, self.__block_length)
+            u = left_shift((d * (2 * d + 1)) & self.__mod_value, logarithm, self.__block_length)
+            a = (right_shift(self.minus_modulo(a, self.__keys[2 * i]), u, self.__block_length) ^ t)
+            c = (right_shift(self.minus_modulo(c, self.__keys[2 * i + 1]), t, self.__block_length) ^ u)
+        b = self.minus_modulo(b, self.__keys[0])
+        d = self.minus_modulo(d, self.__keys[1])
+        return a.to_bytes(self.__block_size, 'big') + b.to_bytes(self.__block_size, 'big') + \
+            c.to_bytes(self.__block_size, 'big') + d.to_bytes(self.__block_size, 'big')
