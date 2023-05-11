@@ -1,10 +1,20 @@
-import algorithms
+import cryption_algorithms as alg
+from simplicity_tests import TestMode
 
 
 if __name__ == '__main__':
-    rc = algorithms.RC6()
+    rc = alg.RC6()
     rc.key_extension((123).to_bytes(16, 'big'))
-    result = rc.encrypt((12345678901234567890).to_bytes(16, 'big'))
-    print(result)
+    input_value = 12345678901234567890
+    print(input_value)
+    result = rc.encrypt(input_value.to_bytes(16, 'big'))
     print(int.from_bytes(rc.decrypt(result), 'big'))
+    print()
+
+    xtr = alg.XTR(TestMode.MILLER_RABIN, 0.999)
+    open_keys = xtr.generate_key()
+    xtr.diffie_hellman()
+    xtr.el_gamal()
+
+
 
