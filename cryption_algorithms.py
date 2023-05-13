@@ -128,12 +128,6 @@ class GFP2Element:
     def is_GFP(self) -> bool:
         return self.__a == self.__b
 
-    def __mul__(self, other) -> 'GFP2Element':
-        xy_1 = self.__a * other.__a
-        xy_2 = self.__b * other.__b
-        xy_12 = (self.__a + self.__b) * (other.__a + other.__b) - xy_1 - xy_2
-        return type(self)(self.__p, params=(xy_2 - xy_12, xy_1 - xy_12))
-
     def __sub__(self, other) -> 'GFP2Element':
         return type(self)(self.__p, params=(self.__a - other.__a, self.__b - other.__b))
 
@@ -259,18 +253,6 @@ class XTR:
                     self.__c_dict[new_n] = (GFP2Element.special_operation(self.__calculate_c(current_n + 1), self.__c,
                                                                           current_c) +
                                             self.__calculate_c(current_n - 1).get_swapped()) if bit else \
-                        (current_c.get_square() - current_c.get_swapped() - current_c.get_swapped())
+                        (current_c.get_square() - (current_c + current_c).get_swapped())
                 current_n = new_n
             return self.__c_dict[n]
-
-        # def __calculate_c(self, n: int) -> GFP2Element:
-        #     if n in self.c_dict:
-        #         return self.c_dict[n]
-        #     divided_n = n >> 1
-        #     c_n = self.__calculate_c(divided_n)
-        #     if n % 2:
-        #         self.c_dict[n] = GFP2Element.special_operation(self.__calculate_c(divided_n + 1), self.__c, c_n) + \
-        #                          self.__calculate_c(divided_n - 1).get_swapped()
-        #         return self.c_dict[n]
-        #     self.c_dict[n] = c_n.get_square() - c_n.get_swapped() - c_n.get_swapped()
-        #     return self.c_dict[n]
