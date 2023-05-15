@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>325</width>
-    <height>100</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>325</width>
-    <height>100</height>
+    <height>300</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>325</width>
-    <height>100</height>
+    <height>300</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,10 +34,35 @@
      <x>0</x>
      <y>0</y>
      <width>321</width>
-     <height>120</height>
+     <height>326</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QLabel" name="label_3">
+      <property name="minimumSize">
+       <size>
+        <width>192</width>
+        <height>192</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>192</width>
+        <height>192</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
     <item>
      <layout class="QFormLayout" name="formLayout">
       <property name="formAlignment">
@@ -136,7 +161,7 @@
        <number>5</number>
       </property>
       <property name="bottomMargin">
-       <number>5</number>
+       <number>10</number>
       </property>
       <item>
        <widget class="QPushButton" name="pushButton_2">

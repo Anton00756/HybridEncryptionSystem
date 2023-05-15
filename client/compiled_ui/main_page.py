@@ -12,24 +12,224 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 748)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayoutWidget = QtWidgets.QWidget(parent=self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 9, 717, 691))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout_2.setContentsMargins(5, 10, 5, 10)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.label_3 = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
+        self.label_3.setMinimumSize(QtCore.QSize(32, 32))
+        self.label_3.setMaximumSize(QtCore.QSize(32, 32))
+        self.label_3.setText("")
+        self.label_3.setScaledContents(True)
+        self.label_3.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout.addWidget(self.label_3)
+        self.lineEdit = QtWidgets.QLineEdit(parent=self.verticalLayoutWidget)
+        self.lineEdit.setMinimumSize(QtCore.QSize(300, 30))
+        self.lineEdit.setMaximumSize(QtCore.QSize(300, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(13)
+        self.lineEdit.setFont(font)
+        self.lineEdit.setToolTip("")
+        self.lineEdit.setStyleSheet("QLineEdit {\n"
+"    border: 2px solid rgb(100,0,0);\n"
+"    border-radius: 10px;\n"
+"    padding: 0 8px;\n"
+"}")
+        self.lineEdit.setMaxLength(40)
+        self.lineEdit.setClearButtonEnabled(True)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout.addWidget(self.lineEdit, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.tabWidget = QtWidgets.QTabWidget(parent=self.verticalLayoutWidget)
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.tabWidget.addTab(self.tab_2, "")
+        self.verticalLayout_2.addWidget(self.tabWidget)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setSpacing(10)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton_3 = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
+        self.pushButton_3.setMinimumSize(QtCore.QSize(165, 0))
+        self.pushButton_3.setMaximumSize(QtCore.QSize(165, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(100,0,0);\n"
+"    border-radius: 8px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+"                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+"                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
+"}")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.horizontalLayout_2.addWidget(self.pushButton_3, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_5 = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
+        self.label_5.setMinimumSize(QtCore.QSize(75, 0))
+        self.label_5.setMaximumSize(QtCore.QSize(75, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.label_5.setFont(font)
+        self.label_5.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_5.setWordWrap(False)
+        self.label_5.setObjectName("label_5")
+        self.horizontalLayout_2.addWidget(self.label_5, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.comboBox = QtWidgets.QComboBox(parent=self.verticalLayoutWidget)
+        self.comboBox.setMinimumSize(QtCore.QSize(70, 0))
+        self.comboBox.setMaximumSize(QtCore.QSize(70, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(11)
+        self.comboBox.setFont(font)
+        self.comboBox.setStyleSheet("QComboBox {\n"
+"    border: 1px solid rgb(100,0,0);\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 5px;\n"
+"    border-bottom-right-radius: 5px;\n"
+"}")
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.horizontalLayout_2.addWidget(self.comboBox, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.label_4 = QtWidgets.QLabel(parent=self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(650, 290, 32, 32))
+        self.label_4.setMinimumSize(QtCore.QSize(32, 32))
+        self.label_4.setMaximumSize(QtCore.QSize(32, 32))
+        self.label_4.setText("")
+        self.label_4.setScaledContents(True)
+        self.label_4.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_4.setObjectName("label_4")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.dockWidget = QtWidgets.QDockWidget(parent=MainWindow)
+        self.dockWidget.setStyleSheet("QDockWidget > QWidget {\n"
+"    border-right: 5px solid rgb(255, 153, 51);\n"
+"    border-left: 5px solid rgb(255, 153, 51);\n"
+"    border-bottom: 5px solid rgb(255, 153, 51);\n"
+"    border-bottom-right-radius: 20px;\n"
+"    border-bottom-left-radius: 20px;\n"
+"}\n"
+"\n"
+"QDockWidget::title {\n"
+"    background: solid rgb(255, 153, 51);\n"
+"}")
+        self.dockWidget.setObjectName("dockWidget")
+        self.dockWidgetContents = QtWidgets.QWidget()
+        self.dockWidgetContents.setObjectName("dockWidgetContents")
+        self.layoutWidget = QtWidgets.QWidget(parent=self.dockWidgetContents)
+        self.layoutWidget.setGeometry(QtCore.QRect(10, -80, 333, 866))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
+        self.verticalLayout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 5)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.label = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.label.setMinimumSize(QtCore.QSize(192, 192))
+        self.label.setMaximumSize(QtCore.QSize(192, 192))
+        self.label.setText("")
+        self.label.setScaledContents(True)
+        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        spacerItem = QtWidgets.QSpacerItem(20, 50, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        self.verticalLayout.addItem(spacerItem)
+        self.label_2 = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.label_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_2.setMaximumSize(QtCore.QSize(16777215, 30))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(12)
+        self.label_2.setFont(font)
+        self.label_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_2.setWordWrap(False)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout.addWidget(self.label_2)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 200, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        self.verticalLayout.addItem(spacerItem1)
+        self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
+        self.pushButton.setMinimumSize(QtCore.QSize(128, 96))
+        self.pushButton.setMaximumSize(QtCore.QSize(128, 96))
+        self.pushButton.setStyleSheet("QPushButton {\n"
+"    border: 3px solid rgb(100,0,0);\n"
+"    border-radius: 10px;\n"
+"}")
+        self.pushButton.setText("")
+        self.pushButton.setIconSize(QtCore.QSize(128, 96))
+        self.pushButton.setFlat(False)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        self.verticalLayout.addItem(spacerItem2)
+        self.pushButton_2 = QtWidgets.QPushButton(parent=self.layoutWidget)
+        self.pushButton_2.setMinimumSize(QtCore.QSize(160, 80))
+        self.pushButton_2.setMaximumSize(QtCore.QSize(160, 80))
+        self.pushButton_2.setStyleSheet("QPushButton {\n"
+"    border: 3px solid rgb(100,0,0);\n"
+"    border-radius: 10px;\n"
+"}")
+        self.pushButton_2.setText("")
+        self.pushButton_2.setIconSize(QtCore.QSize(128, 96))
+        self.pushButton_2.setFlat(False)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.verticalLayout.addWidget(self.pushButton_2, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.dockWidget.setWidget(self.dockWidgetContents)
+        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.comboBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "HES"))
+        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Поиск по имени.."))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Tab 1"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
+        self.pushButton_3.setText(_translate("MainWindow", "Выложить файл"))
+        self.label_5.setText(_translate("MainWindow", "Режим:"))
+        self.comboBox.setCurrentText(_translate("MainWindow", "ECB"))
+        self.comboBox.setItemText(0, _translate("MainWindow", "ECB"))
+        self.comboBox.setItemText(1, _translate("MainWindow", "CBC"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "CFB"))
+        self.comboBox.setItemText(3, _translate("MainWindow", "OFB"))
+        self.comboBox.setItemText(4, _translate("MainWindow", "CTR"))
+        self.comboBox.setItemText(5, _translate("MainWindow", "RD"))
+        self.comboBox.setItemText(6, _translate("MainWindow", "RD+H"))
+        self.label_2.setText(_translate("MainWindow", "Привет"))
 
 
 if __name__ == "__main__":

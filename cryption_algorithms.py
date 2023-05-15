@@ -3,6 +3,7 @@ import math
 import random
 from typing import Optional, Tuple
 import simplicity_tests as st
+import variables
 
 
 class RC6:
@@ -154,6 +155,9 @@ class GFP2Element:
         """
         return self.__a.to_bytes(byte_length, 'big') + self.__b.to_bytes(byte_length, 'big')
 
+    def get_values(self) -> Tuple[int, int]:
+        return self.__a, self.__b
+
 
 class XTR:
     def __init__(self, test_mode: st.TestMode, probability: float = 0.9, bit_length: int = 128):
@@ -168,7 +172,7 @@ class XTR:
         self.__bit_length = bit_length
         self.public_key = None
 
-    def generate_key(self) -> Tuple[int, int, GFP2Element]:
+    def generate_key(self) -> Tuple[int, int, Tuple[int, int]]:
         while True:
             r = random.getrandbits(self.__bit_length)
             q = r ** 2 - r + 1
@@ -191,42 +195,48 @@ class XTR:
                     break
             c.randomize()
 
-        self.public_key = (p, q, tr)
+        self.public_key = (p, q, tr.get_values())
         return self.public_key
 
-    def diffie_hellman(self):
-        if self.public_key is None:
-            self.generate_key()
-        a = random.randint(2, self.public_key[1] - 3)
+    def get_el_gamal_key(self) -> Tuple[int, Tuple[int, int]]:
         tracer = self.Tracer(self.public_key[0])
-        tr_g_a = tracer.calculate_tr(a, self.public_key[2])
-        b = random.randint(2, self.public_key[1] - 3)
-        tr_g_b = tracer.calculate_tr(b)
+        k = random.randint(2, self.public_key[1] - 3)
+        trace_g_k = tracer.calculate_tr(k, GFP2Element(self.public_key[0], params=self.public_key[2]))
+        return k, trace_g_k.get_values()
 
-        k_a = tracer.calculate_tr(a, tr_g_b)
-        k_b = tracer.calculate_tr(b, tr_g_a)
-        print('k_1:', k_a, "\nk_2:", k_b)
-        print()
+    @staticmethod
+    def get_symmetric_key_back(p: int, k: int, tr: Tuple[int, int]) -> bytes:
+        tracer = XTR.Tracer(p)
+        return tracer.calculate_tr(k, GFP2Element(p, params=tr)).get_bytes(3 * (variables.XTR_KEY_BIT_SIZE >> 3))
 
-    def el_gamal(self):
-        if self.public_key is None:
-            self.generate_key()
-        tracer = self.Tracer(self.public_key[0])
-        k = 23589137914
-        trace_g_k = tracer.calculate_tr(k, self.public_key[2])
+    @staticmethod
+    def get_symmetric_key(p: int, q: int, tr: Tuple[int, int], tr_k: Tuple[int, int]) \
+            -> Tuple[Tuple[int, int], bytes]:
+        b = random.randint(2, q - 3)
+        tracer = XTR.Tracer(p)
+        trace_g_b = tracer.calculate_tr(b, GFP2Element(p, params=tr))
+        trace_g_bk = tracer.calculate_tr(b, GFP2Element(p, params=tr_k))
+        return trace_g_b.get_values(), trace_g_bk.get_bytes(3 * (variables.XTR_KEY_BIT_SIZE >> 3))
 
-        b = random.randint(2, self.public_key[1] - 3)
-        trace_g_b = tracer.calculate_tr(b)
-        trace_g_bk = tracer.calculate_tr(b, trace_g_k)
-
-        message = 58221519
-        # print(trace_g_bk.get_bytes(self.__bit_length // 2))
-        e = [pair[0] ^ pair[1] for pair in zip(message.to_bytes(self.__bit_length // 2, 'big'),
-                                               trace_g_bk.get_bytes(self.__bit_length // 2))]
-
-        decrypt_key = tracer.calculate_tr(k, trace_g_b)
-        print('result:', int.from_bytes([pair[0] ^ pair[1]
-                                         for pair in zip(e, decrypt_key.get_bytes(self.__bit_length // 2))], 'big'))
+    # def el_gamal(self):
+    #     if self.public_key is None:
+    #         self.generate_key()
+    #     tracer = self.Tracer(self.public_key[0])
+    #     k = 23589137914
+    #     trace_g_k = tracer.calculate_tr(k, self.public_key[2])
+    #
+    #     b = random.randint(2, self.public_key[1] - 3)
+    #     trace_g_b = tracer.calculate_tr(b)
+    #     trace_g_bk = tracer.calculate_tr(b, trace_g_k)
+    #
+    #     message = 58221519
+    #     # print(trace_g_bk.get_bytes(self.__bit_length // 2))
+    #     e = [pair[0] ^ pair[1] for pair in zip(message.to_bytes(self.__bit_length // 2, 'big'),
+    #                                            trace_g_bk.get_bytes(self.__bit_length // 2))]
+    #
+    #     decrypt_key = tracer.calculate_tr(k, trace_g_b)
+    #     print('result:', int.from_bytes([pair[0] ^ pair[1]
+    #                                      for pair in zip(e, decrypt_key.get_bytes(self.__bit_length // 2))], 'big'))
 
     class Tracer:
         def __init__(self, p: int):

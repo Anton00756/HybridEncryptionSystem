@@ -1,15 +1,26 @@
+import json
+import os
 import sys
+import time
 from typing import Optional
+import requests
 from PyQt6 import QtGui, QtCore
+from PyQt6.QtCore import QThread
+from PyQt6.QtGui import QMovie
 from PyQt6.QtWidgets import *
+
+import variables
 from client.compiled_ui.main_page import Ui_MainWindow
 from login import LogWindow
-from variables import ICON_PATH
+from file_manager import FileManager
+from variables import ICON_PATH, SERVER_ADDRESS
+import updater
 
 """
 python -m PyQt6.uic.pyuic -x client/raw_ui/main_page.ui -o client/compiled_ui/main_page.py
 python -m PyQt6.uic.pyuic -x client/raw_ui/login.ui -o client/compiled_ui/login.py
 python -m PyQt6.uic.pyuic -x client/raw_ui/registration.ui -o client/compiled_ui/registration.py
+python -m PyQt6.uic.pyuic -x client/raw_ui/file_manager.ui -o client/compiled_ui/file_manager.py
 """
 
 
@@ -29,21 +40,125 @@ class HESApp(QMainWindow):
         login.exec()
         if self.user_id is None:
             quit(0)
-        # self.db.update_log()
+        for f in os.listdir(variables.TEMP_DIR):
+            os.remove(os.path.join(variables.TEMP_DIR, f))
+        self.ui.dockWidget.setFixedWidth(self.ui.label.width())
+        self.ui.dockWidget.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        self.ui.dockWidget.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea |
+                                           QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
+        self.ui.dockWidgetContents.setLayout(self.ui.verticalLayout)
+        self.settings = QtCore.QSettings("T-Corp.", "HES")
+        self.addDockWidget(self.settings.value("DockSide", QtCore.Qt.DockWidgetArea.RightDockWidgetArea),
+                           self.ui.dockWidget)
+        self.ui.dockWidget.dockLocationChanged.connect(self.changed_panel_side)
+        self.ui.label.setText(f"Пользователь: {self.user_id}")
+        self.ui.verticalLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ui.label.setPixmap(QtGui.QPixmap("images/person.png"))
+        self.ui.pushButton.setIcon(QtGui.QIcon(QtGui.QPixmap("images/quit.png")))
+        self.ui.pushButton.clicked.connect(self.logout)
+        self.ui.pushButton_2.setIcon(QtGui.QIcon(QtGui.QPixmap("images/invite.png")))
+        self.ui.pushButton_2.clicked.connect(self.invite)
 
-        # self.reload_actions()
-        # self.setCentralWidget(self.ui.tabWidget)
-        # self.ui.tabWidget.tabBarClicked.connect(self.update_courses)
-        #
-        # self.ui.tab.setLayout(self.ui.verticalLayout)
-        # self.ui.tab_2.setLayout(self.ui.verticalLayout_2)
-        # configure_course_table(self.ui.tableWidget, 5, 3)
-        # configure_course_table(self.ui.tableWidget_2, 5, 3)
-        # self.update_courses(0)
+        self.ui.centralwidget.setLayout(self.ui.verticalLayout_2)
+        self.ui.label_3.setPixmap(QtGui.QPixmap("images/search.png"))
+        self.update_btn = elements.UpdateBtn()
+        self.update_btn.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
+        self.ui.horizontalLayout.addWidget(self.update_btn)
+        self.update_btn.clicked.connect(self.update_files)
+        self.ui.horizontalLayout_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        self.ui.comboBox.setStyleSheet(self.ui.comboBox.styleSheet() +
+                                       "QComboBox::down-arrow { image: url(images/arrow.png); }"
+                                       "QComboBox::down-arrow:on { image: url(images/arrow_up.png); }")
+        self.ui.comboBox.setCurrentIndex(self.settings.value("CryptMode", 0))
+        self.ui.comboBox.currentIndexChanged.connect(lambda: self.settings.setValue("CryptMode",
+                                                                                    self.ui.comboBox.currentIndex()))
+        self.ui.pushButton_3.clicked.connect(self.upload_file)
+
+        self.thread: Optional[QThread] = None
+        self.updater: Optional[elements.Updater] = None
+        self.file_managers = {}
+        self.file_managers_count = 0
+
         self.showMaximized()
 
-    def set_user(self, user: int):
+    def upload_file(self):
+        folder = self.settings.value("FileFolder", "")
+        if (result := QFileDialog.getOpenFileName(self, "[HES] Выберите файл", folder, "Все файлы (*.*)")[0]) == '':
+            return
+        self.settings.setValue("FileFolder", result[:result.rfind('')])
+        if os.stat(result).st_size > variables.MAX_BYTE_FILE_SIZE:
+            QMessageBox.warning(self, "[HES] Ошибка", "Файл превышает установленный максимальный размер!")
+            return
+        filer = FileManager(self.windowIcon(), self.user_id, result, self.ui.comboBox.currentIndex(),
+                            self.file_managers_count)
+        self.file_managers[self.file_managers_count] = filer
+        filer.delete.connect(self.delete_filer)
+        filer.show()
+        self.file_managers_count += 1
+
+        # self.thread = QThread()
+        # self.updater = elements.Updater(self)
+        # self.updater.moveToThread(self.thread)
+        # self.thread.started.connect(self.updater.run)
+        # self.updater.finished.connect(self.thread.quit)
+        # self.updater.finished.connect(self.updater.deleteLater)
+        # self.thread.finished.connect(self.thread.deleteLater)
+        # self.thread.finished.connect(lambda: print('end'))
+        # self.thread.start()
+
+    def delete_filer(self, index: int):
+        del self.file_managers[index]
+
+    def update_files(self):
+        self.thread = QThread()
+        self.updater = elements.Updater()
+        self.updater.moveToThread(self.thread)
+        self.thread.started.connect(self.updater.run)
+        self.updater.finished.connect(lambda: self.update_btn.stop_updating())
+        self.updater.finished.connect(self.thread.quit)
+        self.updater.finished.connect(self.updater.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
+    def set_user(self, user: int, name: str):
         self.user_id = user
+        self.ui.label_2.setText(f"Привет, {name if len(name) <= 15 else name[:15] + '...'}")
+
+    def changed_panel_side(self):
+        self.settings.setValue("DockSide", self.dockWidgetArea(self.ui.dockWidget))
+
+    def logout(self):
+        self.hide()
+        self.user_id = None
+        login = LogWindow(self.windowIcon())
+        login.user_index.connect(self.set_user)
+        login.exec()
+        if self.user_id is None:
+            quit(0)
+        self.showMaximized()
+
+    def invite(self):
+        try:
+            response = requests.get(f"{SERVER_ADDRESS}/user/invite/",
+                                    json=json.dumps(dict(user_id=self.user_id)))
+            if response.status_code != 200:
+                QMessageBox.warning(self, "[HES] Приглашение", "Не удалось получить корректный ответ от сервера!")
+                return
+            result = json.loads(response.text)
+            QApplication.clipboard().setText(result['invitation'])
+            QMessageBox.information(self, "[HES] Приглашение",
+                                    f"{'Сгенерировано новое приглашение' if result['generated'] else 'Приглашение'}:\n"
+                                    f"{result['invitation']}\n\n(Помещено в буфер обмена)")
+        except requests.ConnectionError:
+            QMessageBox.critical(self, "[HES] Приглашение", "Не удалось подключиться к серверу!")
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.updater.finished.emit()
+        for manager in self.file_managers.values():
+            manager.index = None
+            manager.close()
+        a0.accept()
+
 
     # def reload_actions(self):
     #     self.ui.menubar.clear()
@@ -120,7 +235,8 @@ class HESApp(QMainWindow):
     #     self.user_type = user_type
 
 
-app = QApplication([])
-application = HESApp()
-application.show()
-sys.exit(app.exec())
+if __name__ == '__main__':
+    app = QApplication([])
+    application = HESApp()
+    application.show()
+    sys.exit(app.exec())
