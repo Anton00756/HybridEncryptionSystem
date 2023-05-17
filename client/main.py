@@ -1,27 +1,20 @@
 import json
 import os
 import sys
-import time
 from typing import Optional
 import requests
 from PyQt6 import QtGui, QtCore
-from PyQt6.QtCore import QThread
-from PyQt6.QtGui import QMovie
+from PyQt6.QtCore import QThread, QPoint
+from PyQt6.QtGui import QAction, QIcon, QPixmap
 from PyQt6.QtWidgets import *
-
+import re
 import variables
 from client.compiled_ui.main_page import Ui_MainWindow
 from login import LogWindow
 from file_manager import FileManager
 from variables import ICON_PATH, SERVER_ADDRESS
 import updater
-
-"""
-python -m PyQt6.uic.pyuic -x client/raw_ui/main_page.ui -o client/compiled_ui/main_page.py
-python -m PyQt6.uic.pyuic -x client/raw_ui/login.ui -o client/compiled_ui/login.py
-python -m PyQt6.uic.pyuic -x client/raw_ui/registration.ui -o client/compiled_ui/registration.py
-python -m PyQt6.uic.pyuic -x client/raw_ui/file_manager.ui -o client/compiled_ui/file_manager.py
-"""
+from file_name_item import FileNameItem
 
 
 class HESApp(QMainWindow):
@@ -34,6 +27,7 @@ class HESApp(QMainWindow):
         self.setWindowIcon(icon)
 
         self.user_id: Optional[int] = None
+        self.user_login: Optional[str] = None
         self.hide()
         login = LogWindow(self.windowIcon())
         login.user_index.connect(self.set_user)
@@ -61,7 +55,7 @@ class HESApp(QMainWindow):
 
         self.ui.centralwidget.setLayout(self.ui.verticalLayout_2)
         self.ui.label_3.setPixmap(QtGui.QPixmap("images/search.png"))
-        self.update_btn = elements.UpdateBtn()
+        self.update_btn = updater.UpdateBtn()
         self.update_btn.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         self.ui.horizontalLayout.addWidget(self.update_btn)
         self.update_btn.clicked.connect(self.update_files)
@@ -75,11 +69,106 @@ class HESApp(QMainWindow):
         self.ui.pushButton_3.clicked.connect(self.upload_file)
 
         self.thread: Optional[QThread] = None
-        self.updater: Optional[elements.Updater] = None
+        self.updater: Optional[updater.Updater] = None
         self.file_managers = {}
         self.file_managers_count = 0
 
+        self.ui.lineEdit.textEdited.connect(self.search_by_name)
+        self.ui.lineEdit.inputRejected.connect(self.search_by_name)
+        self.ui.tableWidget.setHorizontalHeaderLabels(["Название", "Дата загрузки", "Пользователь"])
+        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.ui.tableWidget.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+        self.ui.tableWidget.customContextMenuRequested.connect(self.table_menu_show)
+        self.table_menu = QMenu(self)
+        download = QAction("Скачать", self.table_menu)
+        download.setIcon(QIcon(QPixmap("images/download.ico")))
+        download.triggered.connect(self.download_file)
+        delete = QAction("Удалить", self.table_menu)
+        delete.setIcon(QIcon(QPixmap("images/delete.ico")))
+        delete.triggered.connect(self.delete_file)
+        self.table_menu.addAction(download)
+        self.table_menu.addSeparator()
+        self.table_menu.addAction(delete)
+        self.aim_row: int = -1
+
         self.showMaximized()
+        self.update_btn.clicked.emit()
+
+    def download_file(self):
+        aim_file = self.ui.tableWidget.item(self.aim_row, 0)
+        aim_text = aim_file.text()
+        file_type = aim_text[aim_text.rfind(".") + 1:]
+        file_path = QFileDialog.getSaveFileName(self, "[HES] Загрузка файла",
+                                                os.path.join(self.settings.value("DownloadFolder", ""),
+                                                             aim_text), f"{file_type.upper()}-файлы (*.{file_type});;"
+                                                                        f"Все файлы (*.*)",
+                                                options=QFileDialog.Option.DontUseNativeDialog)[0]
+        if not file_path:
+            return
+        if file_path.rfind(".") == -1:
+            file_path += f".{file_type}"
+        self.settings.setValue("DownloadFolder", file_path[:file_path.rfind("/")])
+        filer = FileManager(self.windowIcon(), self.user_id, file_path, self.ui.comboBox.currentIndex(),
+                            self.file_managers_count, aim_file.file_id)
+        self.file_managers[self.file_managers_count] = filer
+        filer.delete.connect(self.delete_filer)
+        filer.show()
+        self.file_managers_count += 1
+
+    def delete_file(self):
+        answer = QMessageBox.question(self, "[HES] Удаление файла", "Вы точно хотите удалить этот файл?",
+                                      QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if answer == QMessageBox.StandardButton.No:
+            return
+        try:
+            response = requests.delete(f"{SERVER_ADDRESS}/file/delete/"
+                                       f"{self.ui.tableWidget.item(self.aim_row, 0).file_id}")
+            if response.status_code != 200:
+                QMessageBox.warning(self, "[HES] Удаление файла", "Не удалось получить корректный ответ от сервера!")
+                return
+            self.update_btn.clicked.emit()
+        except requests.ConnectionError:
+            QMessageBox.critical(self, "[HES] Удаление файла", "Не удалось подключиться к серверу!")
+
+    def table_menu_show(self, point: QPoint):
+        self.aim_row = self.ui.tableWidget.rowAt(point.y())
+        if self.aim_row == -1:
+            return
+        if self.ui.tableWidget.item(self.aim_row, 2).text() != self.user_login:
+            self.table_menu.actions()[2].setEnabled(False)
+        else:
+            self.table_menu.actions()[2].setEnabled(True)
+        self.table_menu.exec(self.ui.tableWidget.mapToGlobal(point))
+
+    def search_by_name(self, text: str):
+        if text == "":
+            for i in range(self.ui.tableWidget.rowCount()):
+                self.ui.tableWidget.showRow(i)
+            return
+        text = text.lower()
+        try:
+            for i in range(self.ui.tableWidget.rowCount()):
+                if re.search(text, self.ui.tableWidget.item(i, 0).text().lower()) is None:
+                    self.ui.tableWidget.hideRow(i)
+                else:
+                    self.ui.tableWidget.showRow(i)
+        except re.error:
+            self.ui.lineEdit.setText("")
+            QMessageBox.warning(self, "[HES] Ошибка поиска", 'Некорректное регулярное выражение!')
+            self.search_by_name('')
+
+    def add_file_to_table(self, file_id: int, name: str, upload_time: str, user: str):
+        self.ui.tableWidget.setRowCount(self.ui.tableWidget.rowCount() + 1)
+        self.ui.tableWidget.setItem(self.ui.tableWidget.rowCount() - 1, 0, FileNameItem(name, file_id))
+        self.ui.tableWidget.setItem(self.ui.tableWidget.rowCount() - 1, 1, self.prepare_item(upload_time))
+        self.ui.tableWidget.setItem(self.ui.tableWidget.rowCount() - 1, 2, self.prepare_item(user))
+
+    @staticmethod
+    def prepare_item(text: str):
+        item = QTableWidgetItem(text)
+        item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        item.setFont(QtGui.QFont("Times New Roman", 11))
+        return item
 
     def upload_file(self):
         folder = self.settings.value("FileFolder", "")
@@ -96,32 +185,31 @@ class HESApp(QMainWindow):
         filer.show()
         self.file_managers_count += 1
 
-        # self.thread = QThread()
-        # self.updater = elements.Updater(self)
-        # self.updater.moveToThread(self.thread)
-        # self.thread.started.connect(self.updater.run)
-        # self.updater.finished.connect(self.thread.quit)
-        # self.updater.finished.connect(self.updater.deleteLater)
-        # self.thread.finished.connect(self.thread.deleteLater)
-        # self.thread.finished.connect(lambda: print('end'))
-        # self.thread.start()
-
     def delete_filer(self, index: int):
         del self.file_managers[index]
+        self.update_btn.clicked.emit()
 
     def update_files(self):
+        self.ui.tableWidget.setSortingEnabled(False)
+        self.ui.lineEdit.setText("")
+        self.ui.tableWidget.setRowCount(0)
         self.thread = QThread()
-        self.updater = elements.Updater()
+        self.updater = updater.Updater()
         self.updater.moveToThread(self.thread)
+        self.updater.error.connect(lambda value: QMessageBox.critical(self, "[HES] Ошибка",
+                                                                      f'\tОшибка при обновлении:\n{value}'))
+        self.updater.add_file.connect(self.add_file_to_table)
         self.thread.started.connect(self.updater.run)
         self.updater.finished.connect(lambda: self.update_btn.stop_updating())
         self.updater.finished.connect(self.thread.quit)
+        self.updater.finished.connect(lambda: self.ui.tableWidget.setSortingEnabled(True))
         self.updater.finished.connect(self.updater.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.thread.start()
 
     def set_user(self, user: int, name: str):
         self.user_id = user
+        self.user_login = name
         self.ui.label_2.setText(f"Привет, {name if len(name) <= 15 else name[:15] + '...'}")
 
     def changed_panel_side(self):
@@ -153,86 +241,10 @@ class HESApp(QMainWindow):
             QMessageBox.critical(self, "[HES] Приглашение", "Не удалось подключиться к серверу!")
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        self.updater.finished.emit()
         for manager in self.file_managers.values():
             manager.index = None
             manager.close()
         a0.accept()
-
-
-    # def reload_actions(self):
-    #     self.ui.menubar.clear()
-    #     if self.user_type == User.STUDENT:
-    #         button_action = QtGui.QAction(QtGui.QIcon("images/crown.png"), "", self.ui.menubar)
-    #         button_action.triggered.connect(self.make_admin)
-    #         self.ui.menubar.addAction(button_action)
-    #     if self.user_type == User.ADMIN or self.user_type == User.TEACHER:
-    #         button_action = QtGui.QAction("Создать курс", self.ui.menubar)
-    #         button_action.triggered.connect(self.make_course)
-    #         self.ui.menubar.addAction(button_action)
-    #     button_action = QtGui.QAction("Пользователи", self.ui.menubar)
-    #     button_action.triggered.connect(self.all_users)
-    #     self.ui.menubar.addAction(button_action)
-    #     button_action = QtGui.QAction("О пользователе", self.ui.menubar)
-    #     button_action.triggered.connect(self.information)
-    #     self.ui.menubar.addAction(button_action)
-    #
-    # def all_users(self):
-    #     show_data(self, self.db.get_all_users())
-    #
-    # def make_course(self):
-    #     course = CourseCreator(self.db)
-    #     course.exec_()
-    #     self.update_courses(self.ui.tabWidget.currentIndex())
-    #
-    # def update_courses(self, page):
-    #     if not page:
-    #         courses = self.db.get_all_courses()
-    #         table = self.ui.tableWidget
-    #     else:
-    #         courses = self.db.get_my_courses()
-    #         table = self.ui.tableWidget_2
-    #     index = 0
-    #     for course in courses:
-    #         course_text = course[1]
-    #         if course[2] is not None:
-    #             course_text += f'\n[{course[2]}' + (']' if course[3] is None else f'; {course[3]} курс]')
-    #         elif course[3] is not None:
-    #             course_text += f'\n[{course[3]} курс]'
-    #         btn = QPushButton(course_text)
-    #         btn.setStyleSheet("border: 5px solid; background-color: #E8E8E8; border-top-color: red;"
-    #                           "border-left-color: blue; border-right-color: yellow; border-bottom-color: green;"
-    #                           "border-width: 5px; border-radius: 30px; font: bold \"Times New Roman\"; font-size: 17px;"
-    #                           "min-width: 10em; padding: 10px; margin: 3px")
-    #         btn.clicked.connect(lambda state, course_page=page, course_id=course[0]: self.open_course(course_page,
-    #                                                                                                   course_id))
-    #         table.setCellWidget(index // 3, index % 3, btn)
-    #     self.ui.statusbar.showMessage(f"Курсов найдено: {len(courses)}")
-    #
-    # def open_course(self, page, number):
-    #     if not page and not self.db.course_is_my(number):
-    #         answer = QMessageBox.question(self, '[DLS] Подключение', "Хотите присоединиться к данному курсу?",
-    #                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-    #         if answer == QMessageBox.No:
-    #             return
-    #         self.db.connect_to_course(number)
-    #     else:
-    #         self.db.update_course_log(number)
-    #     course_viewer = CourseViewer(self, self.db, self.user_type, number)
-    #     course_viewer.showMaximized()
-    #
-    # def information(self):
-    #     QMessageBox().about(self, "[DLS] О пользователе", self.db.get_person_info())
-    #
-    # def make_admin(self):
-    #     text, ok = QInputDialog.getText(self, '[DLS] Получение админки', 'Введите пароль:', QLineEdit.EchoMode.Password)
-    #     if ok and text == "admin":
-    #         self.db.make_admin(User.ADMIN)
-    #         self.user_type = User.ADMIN
-    #         self.reload_actions()
-    #
-    # def set_user(self, user_type):
-    #     self.user_type = user_type
 
 
 if __name__ == '__main__':

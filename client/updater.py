@@ -1,13 +1,30 @@
+import json
+import requests
 from PyQt6.QtCore import pyqtSignal, Qt, QObject, QTimer
-from PyQt6.QtWidgets import QLabel, QMessageBox, QWidget
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QMovie, QPixmap
+from variables import SERVER_ADDRESS
 
 
 class Updater(QObject):
     finished = pyqtSignal()
+    error = pyqtSignal(str)
+    add_file = pyqtSignal(int, str, str, str)
+
+    def __init__(self):
+        super(Updater, self).__init__()
 
     def run(self):
-        print("Updating...")  # TODO: updating files
+        try:
+            response = requests.get(f"{SERVER_ADDRESS}/files/")
+            if response.status_code != 200:
+                self.error.emit("Не удалось получить корректный ответ от сервера!")
+                self.finished.emit()
+                return
+            for file in json.loads(response.text):
+                self.add_file.emit(file['file_id'], file['file_name'], file['upload_time'], file['user'])
+        except requests.ConnectionError:
+            self.error.emit("Не удалось подключиться к серверу!")
         self.finished.emit()
 
 

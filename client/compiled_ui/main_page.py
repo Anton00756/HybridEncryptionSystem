@@ -49,15 +49,104 @@ class Ui_MainWindow(object):
         self.lineEdit.setObjectName("lineEdit")
         self.horizontalLayout.addWidget(self.lineEdit, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
-        self.tabWidget = QtWidgets.QTabWidget(parent=self.verticalLayoutWidget)
-        self.tabWidget.setObjectName("tabWidget")
-        self.tab = QtWidgets.QWidget()
-        self.tab.setObjectName("tab")
-        self.tabWidget.addTab(self.tab, "")
-        self.tab_2 = QtWidgets.QWidget()
-        self.tab_2.setObjectName("tab_2")
-        self.tabWidget.addTab(self.tab_2, "")
-        self.verticalLayout_2.addWidget(self.tabWidget)
+        self.tableWidget = QtWidgets.QTableWidget(parent=self.verticalLayoutWidget)
+        self.tableWidget.setStyleSheet("QScrollBar:vertical {\n"
+"        width: 20px;\n"
+"        background: white;\n"
+"        margin-left: 3px;\n"
+"        margin-right: 3px;\n"
+"}\n"
+"QScrollBar::handle:vertical {\n"
+"        width: 20px;\n"
+"        min-height: 30px;\n"
+"        background: rgb(68, 69, 73);\n"
+"        margin-top: 15px;\n"
+"        margin-bottom: 15px;\n"
+"}\n"
+"QScrollBar::handle:vertical:hover {\n"
+"        background: rgb(80, 80, 80);\n"
+"}\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"        background: rgb(68, 69, 73);\n"
+"}\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"        background: rgb(68, 69, 73);\n"
+"}\n"
+"QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
+"        background: transparent;\n"
+"}\n"
+"QScrollBar::sub-line:vertical {\n"
+"        height: 15px;\n"
+"        background: rgb(57, 58, 60);\n"
+"        image: url(images/arrow_up_scroll.png);\n"
+"        subcontrol-position: top;\n"
+"}\n"
+"QScrollBar::add-line:vertical {\n"
+"        height: 15px;\n"
+"        background: rgb(57, 58, 60);\n"
+"        image: url(images/arrow_down_scroll.png);\n"
+"        subcontrol-position: bottom;\n"
+"}\n"
+"QScrollBar#verticalScrollBar:vertical {\n"
+"        margin-top: 30px;\n"
+"}\n"
+"\n"
+"QTableView::item {\n"
+"        background: #FDEAA8;\n"
+"        border-bottom: 1px solid rgb(45, 45, 45);\n"
+"}\n"
+"QTableView::item:selected {\n"
+"        background: rgba(255, 255, 255, 40);\n"
+"}\n"
+"QTableView::item:selected:!active {\n"
+"        color: white;\n"
+"}\n"
+"\n"
+"QTableView {\n"
+"        border: 1px solid rgb(45, 45, 45);\n"
+"        background: rgb(57, 58, 60);\n"
+"        Gridline-color: rgb(60, 60, 60);\n"
+"} \n"
+"\n"
+"QHeaderView::section:horizontal:hover {\n"
+"        background: rgb(0, 160, 230);\n"
+"}\n"
+"QHeaderView::section:horizontal:pressed {\n"
+"        background: rgb(0, 180, 255);\n"
+"}\n"
+"\n"
+"QHeaderView::up-arrow {\n"
+"        padding-right: 5px;\n"
+"        subcontrol-position: center right;\n"
+"        image: url(images/arrow_up_scroll.png);\n"
+"}\n"
+"QHeaderView::down-arrow {\n"
+"        padding-right: 5px;\n"
+"        subcontrol-position: center right;\n"
+"        image: url(images/header_down.png);\n"
+"}\n"
+"\n"
+"QHeaderView{\n"
+"        border: node;\n"
+"        border-bottom: 3px solid rgb(0, 160, 230);\n"
+"} ")
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.AnyKeyPressed)
+        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tableWidget.setTextElideMode(QtCore.Qt.TextElideMode.ElideMiddle)
+        self.tableWidget.setShowGrid(False)
+        self.tableWidget.setCornerButtonEnabled(False)
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.horizontalHeader().setVisible(True)
+        self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(150)
+        self.tableWidget.horizontalHeader().setHighlightSections(True)
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(150)
+        self.tableWidget.horizontalHeader().setStretchLastSection(False)
+        self.tableWidget.verticalHeader().setVisible(False)
+        self.verticalLayout_2.addWidget(self.tableWidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(10)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -217,8 +306,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "HES"))
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "Поиск по имени.."))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Tab 1"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
+        self.tableWidget.setSortingEnabled(True)
         self.pushButton_3.setText(_translate("MainWindow", "Выложить файл"))
         self.label_5.setText(_translate("MainWindow", "Режим:"))
         self.comboBox.setCurrentText(_translate("MainWindow", "ECB"))

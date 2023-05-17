@@ -107,17 +107,140 @@
       </layout>
      </item>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="styleSheet">
+        <string notr="true">QScrollBar:vertical {
+        width: 20px;
+        background: white;
+        margin-left: 3px;
+        margin-right: 3px;
+}
+QScrollBar::handle:vertical {
+        width: 20px;
+        min-height: 30px;
+        background: rgb(68, 69, 73);
+        margin-top: 15px;
+        margin-bottom: 15px;
+}
+QScrollBar::handle:vertical:hover {
+        background: rgb(80, 80, 80);
+}
+QScrollBar::sub-line:vertical:hover {
+        background: rgb(68, 69, 73);
+}
+QScrollBar::add-line:vertical:hover {
+        background: rgb(68, 69, 73);
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        background: transparent;
+}
+QScrollBar::sub-line:vertical {
+        height: 15px;
+        background: rgb(57, 58, 60);
+        image: url(images/arrow_up_scroll.png);
+        subcontrol-position: top;
+}
+QScrollBar::add-line:vertical {
+        height: 15px;
+        background: rgb(57, 58, 60);
+        image: url(images/arrow_down_scroll.png);
+        subcontrol-position: bottom;
+}
+QScrollBar#verticalScrollBar:vertical {
+        margin-top: 30px;
+}
+
+QTableView::item {
+        background: #FDEAA8;
+        border-bottom: 1px solid rgb(45, 45, 45);
+}
+QTableView::item:selected {
+        background: rgba(255, 255, 255, 40);
+}
+QTableView::item:selected:!active {
+        color: white;
+}
+
+QTableView {
+        border: 1px solid rgb(45, 45, 45);
+        background: rgb(57, 58, 60);
+		Gridline-color: rgb(60, 60, 60);
+} 
+
+QHeaderView::section:horizontal:hover {
+        background: rgb(0, 160, 230);
+}
+QHeaderView::section:horizontal:pressed {
+        background: rgb(0, 180, 255);
+}
+
+QHeaderView::up-arrow {
+        padding-right: 5px;
+        subcontrol-position: center right;
+		image: url(images/arrow_up_scroll.png);
+}
+QHeaderView::down-arrow {
+        padding-right: 5px;
+        subcontrol-position: center right;
+		image: url(images/header_down.png);
+}
+
+QHeaderView{
+		border: node;
+        border-bottom: 3px solid rgb(0, 160, 230);
+} </string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::AnyKeyPressed</set>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideMiddle</enum>
+       </property>
+       <property name="showGrid">
+        <bool>false</bool>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="cornerButtonEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="rowCount">
+        <number>0</number>
+       </property>
+       <property name="columnCount">
+        <number>3</number>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>150</number>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>150</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <column/>
+       <column/>
+       <column/>
       </widget>
      </item>
      <item>

@@ -218,26 +218,6 @@ class XTR:
         trace_g_bk = tracer.calculate_tr(b, GFP2Element(p, params=tr_k))
         return trace_g_b.get_values(), trace_g_bk.get_bytes(3 * (variables.XTR_KEY_BIT_SIZE >> 3))
 
-    # def el_gamal(self):
-    #     if self.public_key is None:
-    #         self.generate_key()
-    #     tracer = self.Tracer(self.public_key[0])
-    #     k = 23589137914
-    #     trace_g_k = tracer.calculate_tr(k, self.public_key[2])
-    #
-    #     b = random.randint(2, self.public_key[1] - 3)
-    #     trace_g_b = tracer.calculate_tr(b)
-    #     trace_g_bk = tracer.calculate_tr(b, trace_g_k)
-    #
-    #     message = 58221519
-    #     # print(trace_g_bk.get_bytes(self.__bit_length // 2))
-    #     e = [pair[0] ^ pair[1] for pair in zip(message.to_bytes(self.__bit_length // 2, 'big'),
-    #                                            trace_g_bk.get_bytes(self.__bit_length // 2))]
-    #
-    #     decrypt_key = tracer.calculate_tr(k, trace_g_b)
-    #     print('result:', int.from_bytes([pair[0] ^ pair[1]
-    #                                      for pair in zip(e, decrypt_key.get_bytes(self.__bit_length // 2))], 'big'))
-
     class Tracer:
         def __init__(self, p: int):
             self.__p = p

@@ -1,6 +1,5 @@
 from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtGui import QPixmap
-
 from client.compiled_ui.login import Ui_Login
 from registration import RegWindow
 import requests

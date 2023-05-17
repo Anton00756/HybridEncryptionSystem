@@ -1,13 +1,9 @@
 import enum
 import math
-import multiprocessing.pool
-from concurrent.futures import ProcessPoolExecutor
-from multiprocessing import Pool, cpu_count
-from typing import Optional
+from multiprocessing import cpu_count
+from multiprocessing.pool import ThreadPool
 from queue import Queue
-
 from PyQt6.QtCore import QObject, pyqtSignal
-
 from cryption_algorithms import RC6
 import variables
 
@@ -28,13 +24,13 @@ class ModeECB:
         self.__algorithm = algorithm
 
     def encrypt(self, data):
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             return [byte for block in pool.map(self.__algorithm.encrypt,
                                                [data[i: i + self.__block_size]
                                                 for i in range(0, len(data), self.__block_size)]) for byte in block]
 
     def decrypt(self, data):
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             return [byte for block in pool.map(self.__algorithm.decrypt,
                                                [data[i: i + self.__block_size]
                                                 for i in range(0, len(data), self.__block_size)]) for byte in block]
@@ -116,9 +112,9 @@ class ModeCTR:
 
     def encrypt(self, data):
         result = []
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             for (index, block) in enumerate(pool.map(self.__algorithm.encrypt,
-                                                     (list(i.to_bytes(self.__block_size, byteorder="big"))
+                                                     (i.to_bytes(self.__block_size, byteorder="big")
                                                       for i in range(self.__counter,
                                                                      self.__counter +
                                                                      math.ceil(len(data) / self.__block_size))))):
@@ -129,9 +125,9 @@ class ModeCTR:
 
     def decrypt(self, data):
         result = []
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             for (index, block) in enumerate(pool.map(self.__algorithm.encrypt,
-                                                     (list(i.to_bytes(self.__block_size, byteorder="big"))
+                                                     (i.to_bytes(self.__block_size, byteorder="big")
                                                       for i in range(self.__counter,
                                                                      self.__counter +
                                                                      math.ceil(len(data) / self.__block_size))))):
@@ -165,7 +161,7 @@ class ModeRD:
                                            self.__block_value + math.ceil(len(data) / self.__block_size) * self.__delta,
                                            self.__delta)),
                            (data[i: i + self.__block_size] for i in range(0, len(data), self.__block_size)))])
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             for block in pool.map(self.__algorithm.encrypt, blocks):
                 result.extend(block)
         self.__block_value += math.ceil(len(data) / self.__block_size) * self.__delta
@@ -177,8 +173,8 @@ class ModeRD:
             self.__delta = int.from_bytes(self.__algorithm.decrypt(data[:self.__block_size])[self.__block_size // 2:],
                                           byteorder='big')
             self.__block_value = int.from_bytes(self.__algorithm.decrypt(data[:self.__block_size]), byteorder='big')
-            del data[:self.__block_size]
-        with Pool(processes=cpu_count()) as pool:
+            data = data[self.__block_size:]
+        with ThreadPool(processes=cpu_count()) as pool:
             for block in pool.map(self.__algorithm.decrypt, [data[i: i + self.__block_size]
                                                              for i in range(0, len(data), self.__block_size)]):
                 result.extend(f ^ s for f, s in zip(block,
@@ -212,7 +208,7 @@ class ModeRDH:
                                            self.__block_value + math.ceil(len(data) / self.__block_size) * self.__delta,
                                            self.__delta)),
                            (data[i: i + self.__block_size] for i in range(0, len(data), self.__block_size)))])
-        with Pool(processes=cpu_count()) as pool:
+        with ThreadPool(processes=cpu_count()) as pool:
             for block in pool.map(self.__algorithm.encrypt, blocks):
                 result.extend(block)
         self.__block_value += math.ceil(len(data) / self.__block_size) * self.__delta
@@ -227,13 +223,15 @@ class ModeRDH:
             self.__block_value = int.from_bytes(self.__algorithm.decrypt(data[:self.__block_size]), byteorder='big')
             hash_value = int.from_bytes(self.__algorithm.decrypt(data[self.__block_size:2 * self.__block_size]),
                                         byteorder='big', signed=True)
-            del data[:2 * self.__block_size]
-        with Pool(processes=cpu_count()) as pool:
+            data = data[2 * self.__block_size:]
+        with ThreadPool(processes=cpu_count()) as pool:
             for block in pool.map(self.__algorithm.decrypt, [data[i: i + self.__block_size]
                                                              for i in range(0, len(data), self.__block_size)]):
                 result.extend(f ^ s for f, s in zip(block, self.__block_value.to_bytes(self.__block_size,
                                                                                        byteorder='big')))
                 self.__block_value += self.__delta
+        if hash_value is not None and hash_value != hash(tuple(result)):
+            raise ValueError('[RDH] Подмена данных!')
         return result
 
 
