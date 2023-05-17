@@ -1,5 +1,5 @@
-import sqlite3
 import os
+import sqlite3
 from hashlib import sha256
 from typing import Optional, Dict, Tuple, List
 from uuid import uuid4
@@ -13,6 +13,7 @@ def conn(function):
         result = function(self, *args, **kwargs)
         connection.close()
         return result
+
     return f
 
 

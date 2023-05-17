@@ -149,9 +149,9 @@ class GFP2Element:
     def get_bytes(self, byte_length: int) -> bytes:
         """
         Получение байтового представление
-        :param byte_length: Длина байтового представления одного числа
+        :param byte_length: Длина байтового представления одного числа
         [Лучше использовать байты для: XTR_bit_length * 3]
-        :return: Байтовое представление длиной 2 * byte_length
+        :return: Байтовое представление длиной 2 * byte_length
         """
         return self.__a.to_bytes(byte_length, 'big') + self.__b.to_bytes(byte_length, 'big')
 

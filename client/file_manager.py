@@ -77,9 +77,9 @@ class Runner(QObject):
 
     def encrypt(self):
         algorithm = RC6(variables.RC6_WORD_BIT_SIZE, variables.RC6_ROUND_COUNT, variables.RC6_KEY_BYTE_SIZE)
-        key = bytearray(os.urandom(variables.RC6_KEY_BYTE_SIZE))
+        key = os.urandom(variables.RC6_KEY_BYTE_SIZE)
         vector = None if self.__mode == fe.AggregatorMode.ECB or self.__mode == fe.AggregatorMode.CTR else \
-            bytearray(os.urandom(variables.RC6_WORD_BIT_SIZE >> 1))
+            os.urandom(variables.RC6_WORD_BIT_SIZE >> 1)
         self.encrypter = fe.Encrypter(algorithm, key, self.__mode, vector, block_size=variables.RC6_WORD_BIT_SIZE >> 1)
         self.encrypter.progress.connect(self.progress)
         try:
@@ -98,8 +98,10 @@ class Runner(QObject):
                 os.remove(self.__new_path)
                 time.sleep(0.5)
                 self.result.emit('')
+        except FileNotFoundError:
+            self.result.emit('Файл не найден!')
         except Exception as e:
-            self.result.emit(e.args[0])
+            self.result.emit(str(e.args[0]))
         self.done = True
         self.finished.emit()
 
@@ -143,8 +145,10 @@ class Runner(QObject):
                 os.remove(self.__new_path)
                 time.sleep(0.5)
                 self.result.emit('')
+        except FileNotFoundError:
+            self.result.emit('Файл не найден!')
         except Exception as e:
-            self.result.emit(e.args[0])
+            self.result.emit(str(e.args[0]))
         self.done = True
         self.finished.emit()
 

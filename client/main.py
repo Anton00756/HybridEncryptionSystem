@@ -14,7 +14,7 @@ from login import LogWindow
 from file_manager import FileManager
 from variables import ICON_PATH, SERVER_ADDRESS
 import updater
-from file_name_item import FileNameItem
+from client.file_name_item import FileNameItem
 
 
 class HESApp(QMainWindow):
@@ -100,7 +100,7 @@ class HESApp(QMainWindow):
         file_type = aim_text[aim_text.rfind(".") + 1:]
         file_path = QFileDialog.getSaveFileName(self, "[HES] Загрузка файла",
                                                 os.path.join(self.settings.value("DownloadFolder", ""),
-                                                             aim_text), f"{file_type.upper()}-файлы (*.{file_type});;"
+                                                             aim_text), f"{file_type.upper()}-файлы (*.{file_type});;"
                                                                         f"Все файлы (*.*)",
                                                 options=QFileDialog.Option.DontUseNativeDialog)[0]
         if not file_path:
@@ -116,7 +116,7 @@ class HESApp(QMainWindow):
         self.file_managers_count += 1
 
     def delete_file(self):
-        answer = QMessageBox.question(self, "[HES] Удаление файла", "Вы точно хотите удалить этот файл?",
+        answer = QMessageBox.question(self, "[HES] Удаление файла", "Вы точно хотите удалить этот файл?",
                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         if answer == QMessageBox.StandardButton.No:
             return
@@ -153,9 +153,7 @@ class HESApp(QMainWindow):
                 else:
                     self.ui.tableWidget.showRow(i)
         except re.error:
-            self.ui.lineEdit.setText("")
-            QMessageBox.warning(self, "[HES] Ошибка поиска", 'Некорректное регулярное выражение!')
-            self.search_by_name('')
+            pass
 
     def add_file_to_table(self, file_id: int, name: str, upload_time: str, user: str):
         self.ui.tableWidget.setRowCount(self.ui.tableWidget.rowCount() + 1)
@@ -176,7 +174,7 @@ class HESApp(QMainWindow):
             return
         self.settings.setValue("FileFolder", result[:result.rfind('')])
         if os.stat(result).st_size > variables.MAX_BYTE_FILE_SIZE:
-            QMessageBox.warning(self, "[HES] Ошибка", "Файл превышает установленный максимальный размер!")
+            QMessageBox.warning(self, "[HES] Ошибка", "Файл превышает установленный максимальный размер!")
             return
         filer = FileManager(self.windowIcon(), self.user_id, result, self.ui.comboBox.currentIndex(),
                             self.file_managers_count)

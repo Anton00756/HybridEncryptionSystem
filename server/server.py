@@ -1,5 +1,5 @@
 from hashlib import sha256
-from flask import Flask, json, request, g, abort, Response, send_file
+from flask import Flask, json, request, abort, Response, send_file
 import os
 from werkzeug.datastructures import FileStorage
 import variables
@@ -12,10 +12,6 @@ api = Flask(__name__)
 api.config.from_object(__name__)
 api.config.update(dict(
     DATABASE=os.path.join(api.root_path, 'base.db'),
-    DATA_FOLDER='data_directory',
-    SECRET_KEY='DEV_KEY',
-    USERNAME='admin',
-    PASSWORD='default'
 ))
 api.config.from_envvar('FLASKR_SETTINGS', silent=True)
 base = DBAggregator(api.config['DATABASE'])
@@ -27,7 +23,7 @@ def login():
     try:
         return json.dumps(dict(index=base.check_user(args['login'], args['password'])))
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/user/invite/', methods=['GET'])
@@ -35,7 +31,7 @@ def invite_user():
     try:
         return json.dumps(base.invite_user(json.loads(request.json).get('user_id')))
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/user/reg', methods=['POST'])
@@ -44,7 +40,7 @@ def add_user():
     try:
         return Response(status=base.add_user(args['login'], args['password'], args['invitation']))
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/key/asymmetric/', methods=['GET'])
@@ -62,7 +58,7 @@ def upload_file():
         FileStorage(request.files.get('file')).save(os.path.join(variables.DATA_DIR, request.form['name']))
         return 'OK'
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/file/info', methods=['POST'])
@@ -78,7 +74,7 @@ def upload_file_info():
         base.add_sym_key(sha256(args['new_name'].encode('utf-8')).hexdigest(), convert_bytes(sym_key))
         return 'OK'
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/files/', methods=['GET'])
@@ -91,7 +87,7 @@ def download_file(file_id: int):
     try:
         return send_file(os.path.join(variables.DATA_DIR, base.get_file_name(file_id)), as_attachment=True)
     except FileNotFoundError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/file/info/', methods=['GET'])
@@ -104,7 +100,7 @@ def download_file_info():
         file_data = base.get_file_data(args['file_id'])
         return json.dumps(dict(key=convert_bytes(key), tr=trace, mode=file_data[0], init_vector=file_data[1]))
     except KeyError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 @api.route('/file/delete/<file_id>', methods=['DELETE'])
@@ -114,7 +110,7 @@ def delete_file(file_id: int):
         os.remove(os.path.join(variables.DATA_DIR, file_name))
         return 'OK'
     except FileNotFoundError:
-        abort(400, 'Некорректный запрос')
+        abort(400, 'Некорректный запрос')
 
 
 if __name__ == '__main__':
