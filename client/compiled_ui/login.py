@@ -31,7 +31,7 @@ class Ui_Login(object):
         self.label_3.setObjectName("label_3")
         self.verticalLayout.addWidget(self.label_3, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setFormAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignTop)
+        self.formLayout.setFormAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignTop)
         self.formLayout.setContentsMargins(10, 5, 10, -1)
         self.formLayout.setObjectName("formLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
@@ -47,10 +47,10 @@ class Ui_Login(object):
         self.lineEdit.setFont(font)
         self.lineEdit.setToolTip("")
         self.lineEdit.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                    "    border: 2px solid rgb(100,0,0);\n"
+                                    "    border-radius: 10px;\n"
+                                    "    padding: 0 8px;\n"
+                                    "}")
         self.lineEdit.setMaxLength(40)
         self.lineEdit.setObjectName("lineEdit")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.lineEdit)
@@ -66,10 +66,10 @@ class Ui_Login(object):
         font.setPointSize(13)
         self.lineEdit_2.setFont(font)
         self.lineEdit_2.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 10px;\n"
+                                      "    padding: 0 8px;\n"
+                                      "}")
         self.lineEdit_2.setMaxLength(256)
         self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.lineEdit_2.setObjectName("lineEdit_2")
@@ -85,16 +85,16 @@ class Ui_Login(object):
         font.setPointSize(12)
         self.pushButton_2.setFont(font)
         self.pushButton_2.setStyleSheet("QPushButton {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 8px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
-"}")
+                                        "    border: 2px solid rgb(100,0,0);\n"
+                                        "    border-radius: 8px;\n"
+                                        "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                        "                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
+                                        "}\n"
+                                        "\n"
+                                        "QPushButton:pressed {\n"
+                                        "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                        "                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
+                                        "}")
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_4.addWidget(self.pushButton_2)
         self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
@@ -104,16 +104,16 @@ class Ui_Login(object):
         font.setPointSize(12)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet("QPushButton {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 8px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 8px;\n"
+                                      "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                      "                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
+                                      "}\n"
+                                      "\n"
+                                      "QPushButton:pressed {\n"
+                                      "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                      "                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
+                                      "}")
         self.pushButton.setDefault(True)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_4.addWidget(self.pushButton)
@@ -133,6 +133,7 @@ class Ui_Login(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     Login = QtWidgets.QDialog()
     ui = Ui_Login()

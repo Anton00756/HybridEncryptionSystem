@@ -1,10 +1,12 @@
-from PyQt6 import QtWidgets, QtCore, QtGui
-from PyQt6.QtGui import QPixmap
-from client.compiled_ui.login import Ui_Login
-from registration import RegWindow
-import requests
 import hashlib
 import json
+
+import requests
+from PyQt6 import QtWidgets, QtCore, QtGui
+from PyQt6.QtGui import QPixmap
+
+from client.compiled_ui.login import Ui_Login
+from registration import RegWindow
 from variables import SERVER_ADDRESS
 
 

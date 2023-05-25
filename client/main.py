@@ -1,20 +1,22 @@
 import json
 import os
+import re
 import sys
 from typing import Optional
+
 import requests
 from PyQt6 import QtGui, QtCore
 from PyQt6.QtCore import QThread, QPoint
 from PyQt6.QtGui import QAction, QIcon, QPixmap
 from PyQt6.QtWidgets import *
-import re
+
+import updater
 import variables
 from client.compiled_ui.main_page import Ui_MainWindow
-from login import LogWindow
-from file_manager import FileManager
-from variables import ICON_PATH, SERVER_ADDRESS
-import updater
 from client.file_name_item import FileNameItem
+from file_manager import FileManager
+from login import LogWindow
+from variables import ICON_PATH, SERVER_ADDRESS
 
 
 class HESApp(QMainWindow):
@@ -185,7 +187,7 @@ class HESApp(QMainWindow):
 
     def delete_filer(self, index: int):
         del self.file_managers[index]
-        self.update_btn.clicked.emit()
+        self.update_btn.update_values()
 
     def update_files(self):
         self.ui.tableWidget.setSortingEnabled(False)

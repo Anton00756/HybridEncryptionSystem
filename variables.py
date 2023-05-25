@@ -1,4 +1,5 @@
 from typing import Final
+
 import simplicity_tests as st
 
 ICON_PATH: Final[str] = r'C:\Users\anton\PycharmProjects\HybridEncryptionSystem\client\images\icon.ico'
@@ -13,4 +14,4 @@ THREAD_QUEUE_SIZE: Final[int] = 3
 TEST: Final[st.TestMode] = st.TestMode.MILLER_RABIN
 TEST_PRECISION: Final[float] = 0.999
 XTR_KEY_BIT_SIZE: Final[int] = 128
-MAX_BYTE_FILE_SIZE: Final[int] = 50 * 1024 * 1024
+MAX_BYTE_FILE_SIZE: Final[int] = 100 * 1024 * 1024

@@ -53,6 +53,7 @@ class Ui_FileManager(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     FileManager = QtWidgets.QDialog()
     ui = Ui_FileManager()

@@ -27,7 +27,8 @@ class Ui_Registration(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label.setFont(font)
-        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading | QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label.setObjectName("label")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
         self.lineEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
@@ -36,10 +37,10 @@ class Ui_Registration(object):
         font.setPointSize(13)
         self.lineEdit.setFont(font)
         self.lineEdit.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                    "    border: 2px solid rgb(100,0,0);\n"
+                                    "    border-radius: 10px;\n"
+                                    "    padding: 0 8px;\n"
+                                    "}")
         self.lineEdit.setMaxLength(40)
         self.lineEdit.setObjectName("lineEdit")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.lineEdit)
@@ -47,7 +48,8 @@ class Ui_Registration(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_2.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading | QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_2.setObjectName("label_2")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_2)
         self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.layoutWidget)
@@ -56,10 +58,10 @@ class Ui_Registration(object):
         font.setPointSize(13)
         self.lineEdit_2.setFont(font)
         self.lineEdit_2.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 10px;\n"
+                                      "    padding: 0 8px;\n"
+                                      "}")
         self.lineEdit_2.setMaxLength(256)
         self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.lineEdit_2.setObjectName("lineEdit_2")
@@ -68,7 +70,8 @@ class Ui_Registration(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label_3.setFont(font)
-        self.label_3.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_3.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading | QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_3)
         self.lineEdit_3 = QtWidgets.QLineEdit(parent=self.layoutWidget)
@@ -77,10 +80,10 @@ class Ui_Registration(object):
         font.setPointSize(13)
         self.lineEdit_3.setFont(font)
         self.lineEdit_3.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 10px;\n"
+                                      "    padding: 0 8px;\n"
+                                      "}")
         self.lineEdit_3.setMaxLength(256)
         self.lineEdit_3.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.lineEdit_3.setObjectName("lineEdit_3")
@@ -89,7 +92,8 @@ class Ui_Registration(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label_4.setFont(font)
-        self.label_4.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_4.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading | QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_4)
         self.lineEdit_4 = QtWidgets.QLineEdit(parent=self.layoutWidget)
@@ -98,10 +102,10 @@ class Ui_Registration(object):
         font.setPointSize(13)
         self.lineEdit_4.setFont(font)
         self.lineEdit_4.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 10px;\n"
+                                      "    padding: 0 8px;\n"
+                                      "}")
         self.lineEdit_4.setMaxLength(36)
         self.lineEdit_4.setObjectName("lineEdit_4")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.lineEdit_4)
@@ -114,18 +118,19 @@ class Ui_Registration(object):
         font.setPointSize(12)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet("QPushButton {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 8px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
-"}")
+                                      "    border: 2px solid rgb(100,0,0);\n"
+                                      "    border-radius: 8px;\n"
+                                      "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                      "                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
+                                      "}\n"
+                                      "\n"
+                                      "QPushButton:pressed {\n"
+                                      "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                      "                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
+                                      "}")
         self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.verticalLayout.addWidget(self.pushButton, 0,
+                                      QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
 
         self.retranslateUi(Registration)
         QtCore.QMetaObject.connectSlotsByName(Registration)
@@ -142,6 +147,7 @@ class Ui_Registration(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     Registration = QtWidgets.QDialog()
     ui = Ui_Registration()

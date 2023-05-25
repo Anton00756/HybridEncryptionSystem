@@ -3,9 +3,11 @@ import math
 from multiprocessing import cpu_count
 from multiprocessing.pool import ThreadPool
 from queue import Queue
+
 from PyQt6.QtCore import QObject, pyqtSignal
-from cryption_algorithms import RC6
+
 import variables
+from cryption_algorithms import RC6
 
 
 class AggregatorMode(enum.Enum):

@@ -1,12 +1,13 @@
-from hashlib import sha256
-from flask import Flask, json, request, abort, Response, send_file
 import os
-from werkzeug.datastructures import FileStorage
-import variables
-from db import DBAggregator
-import cryption_algorithms as ca
-from client.file_manager import convert_bytes, convert_str
+from hashlib import sha256
 
+from flask import Flask, json, request, abort, Response, send_file
+from werkzeug.datastructures import FileStorage
+
+import cryption_algorithms as ca
+import variables
+from client.file_manager import convert_bytes, convert_str
+from db import DBAggregator
 
 api = Flask(__name__)
 api.config.from_object(__name__)

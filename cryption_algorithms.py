@@ -2,6 +2,7 @@ import copy
 import math
 import random
 from typing import Optional, Tuple
+
 import simplicity_tests as st
 import variables
 

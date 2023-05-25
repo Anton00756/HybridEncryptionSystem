@@ -40,96 +40,97 @@ class Ui_MainWindow(object):
         self.lineEdit.setFont(font)
         self.lineEdit.setToolTip("")
         self.lineEdit.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"    padding: 0 8px;\n"
-"}")
+                                    "    border: 2px solid rgb(100,0,0);\n"
+                                    "    border-radius: 10px;\n"
+                                    "    padding: 0 8px;\n"
+                                    "}")
         self.lineEdit.setMaxLength(40)
         self.lineEdit.setClearButtonEnabled(True)
         self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout.addWidget(self.lineEdit, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout.addWidget(self.lineEdit, 0,
+                                        QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.tableWidget = QtWidgets.QTableWidget(parent=self.verticalLayoutWidget)
         self.tableWidget.setStyleSheet("QScrollBar:vertical {\n"
-"        width: 20px;\n"
-"        background: white;\n"
-"        margin-left: 3px;\n"
-"        margin-right: 3px;\n"
-"}\n"
-"QScrollBar::handle:vertical {\n"
-"        width: 20px;\n"
-"        min-height: 30px;\n"
-"        background: rgb(68, 69, 73);\n"
-"        margin-top: 15px;\n"
-"        margin-bottom: 15px;\n"
-"}\n"
-"QScrollBar::handle:vertical:hover {\n"
-"        background: rgb(80, 80, 80);\n"
-"}\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"        background: rgb(68, 69, 73);\n"
-"}\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"        background: rgb(68, 69, 73);\n"
-"}\n"
-"QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
-"        background: transparent;\n"
-"}\n"
-"QScrollBar::sub-line:vertical {\n"
-"        height: 15px;\n"
-"        background: rgb(57, 58, 60);\n"
-"        image: url(images/arrow_up_scroll.png);\n"
-"        subcontrol-position: top;\n"
-"}\n"
-"QScrollBar::add-line:vertical {\n"
-"        height: 15px;\n"
-"        background: rgb(57, 58, 60);\n"
-"        image: url(images/arrow_down_scroll.png);\n"
-"        subcontrol-position: bottom;\n"
-"}\n"
-"QScrollBar#verticalScrollBar:vertical {\n"
-"        margin-top: 30px;\n"
-"}\n"
-"\n"
-"QTableView::item {\n"
-"        background: #FDEAA8;\n"
-"        border-bottom: 1px solid rgb(45, 45, 45);\n"
-"}\n"
-"QTableView::item:selected {\n"
-"        background: rgba(255, 255, 255, 40);\n"
-"}\n"
-"QTableView::item:selected:!active {\n"
-"        color: white;\n"
-"}\n"
-"\n"
-"QTableView {\n"
-"        border: 1px solid rgb(45, 45, 45);\n"
-"        background: rgb(57, 58, 60);\n"
-"        Gridline-color: rgb(60, 60, 60);\n"
-"} \n"
-"\n"
-"QHeaderView::section:horizontal:hover {\n"
-"        background: rgb(0, 160, 230);\n"
-"}\n"
-"QHeaderView::section:horizontal:pressed {\n"
-"        background: rgb(0, 180, 255);\n"
-"}\n"
-"\n"
-"QHeaderView::up-arrow {\n"
-"        padding-right: 5px;\n"
-"        subcontrol-position: center right;\n"
-"        image: url(images/arrow_up_scroll.png);\n"
-"}\n"
-"QHeaderView::down-arrow {\n"
-"        padding-right: 5px;\n"
-"        subcontrol-position: center right;\n"
-"        image: url(images/header_down.png);\n"
-"}\n"
-"\n"
-"QHeaderView{\n"
-"        border: node;\n"
-"        border-bottom: 3px solid rgb(0, 160, 230);\n"
-"} ")
+                                       "        width: 20px;\n"
+                                       "        background: white;\n"
+                                       "        margin-left: 3px;\n"
+                                       "        margin-right: 3px;\n"
+                                       "}\n"
+                                       "QScrollBar::handle:vertical {\n"
+                                       "        width: 20px;\n"
+                                       "        min-height: 30px;\n"
+                                       "        background: rgb(68, 69, 73);\n"
+                                       "        margin-top: 15px;\n"
+                                       "        margin-bottom: 15px;\n"
+                                       "}\n"
+                                       "QScrollBar::handle:vertical:hover {\n"
+                                       "        background: rgb(80, 80, 80);\n"
+                                       "}\n"
+                                       "QScrollBar::sub-line:vertical:hover {\n"
+                                       "        background: rgb(68, 69, 73);\n"
+                                       "}\n"
+                                       "QScrollBar::add-line:vertical:hover {\n"
+                                       "        background: rgb(68, 69, 73);\n"
+                                       "}\n"
+                                       "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
+                                       "        background: transparent;\n"
+                                       "}\n"
+                                       "QScrollBar::sub-line:vertical {\n"
+                                       "        height: 15px;\n"
+                                       "        background: rgb(57, 58, 60);\n"
+                                       "        image: url(images/arrow_up_scroll.png);\n"
+                                       "        subcontrol-position: top;\n"
+                                       "}\n"
+                                       "QScrollBar::add-line:vertical {\n"
+                                       "        height: 15px;\n"
+                                       "        background: rgb(57, 58, 60);\n"
+                                       "        image: url(images/arrow_down_scroll.png);\n"
+                                       "        subcontrol-position: bottom;\n"
+                                       "}\n"
+                                       "QScrollBar#verticalScrollBar:vertical {\n"
+                                       "        margin-top: 30px;\n"
+                                       "}\n"
+                                       "\n"
+                                       "QTableView::item {\n"
+                                       "        background: #FDEAA8;\n"
+                                       "        border-bottom: 1px solid rgb(45, 45, 45);\n"
+                                       "}\n"
+                                       "QTableView::item:selected {\n"
+                                       "        background: rgba(255, 255, 255, 40);\n"
+                                       "}\n"
+                                       "QTableView::item:selected:!active {\n"
+                                       "        color: white;\n"
+                                       "}\n"
+                                       "\n"
+                                       "QTableView {\n"
+                                       "        border: 1px solid rgb(45, 45, 45);\n"
+                                       "        background: rgb(57, 58, 60);\n"
+                                       "        Gridline-color: rgb(60, 60, 60);\n"
+                                       "} \n"
+                                       "\n"
+                                       "QHeaderView::section:horizontal:hover {\n"
+                                       "        background: rgb(0, 160, 230);\n"
+                                       "}\n"
+                                       "QHeaderView::section:horizontal:pressed {\n"
+                                       "        background: rgb(0, 180, 255);\n"
+                                       "}\n"
+                                       "\n"
+                                       "QHeaderView::up-arrow {\n"
+                                       "        padding-right: 5px;\n"
+                                       "        subcontrol-position: center right;\n"
+                                       "        image: url(images/arrow_up_scroll.png);\n"
+                                       "}\n"
+                                       "QHeaderView::down-arrow {\n"
+                                       "        padding-right: 5px;\n"
+                                       "        subcontrol-position: center right;\n"
+                                       "        image: url(images/header_down.png);\n"
+                                       "}\n"
+                                       "\n"
+                                       "QHeaderView{\n"
+                                       "        border: node;\n"
+                                       "        border-bottom: 3px solid rgb(0, 160, 230);\n"
+                                       "} ")
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.AnyKeyPressed)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
@@ -158,18 +159,19 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.pushButton_3.setFont(font)
         self.pushButton_3.setStyleSheet("QPushButton {\n"
-"    border: 2px solid rgb(100,0,0);\n"
-"    border-radius: 8px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-"                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
-"}")
+                                        "    border: 2px solid rgb(100,0,0);\n"
+                                        "    border-radius: 8px;\n"
+                                        "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                        "                                      stop: 0 #FFD700, stop: 1 rgb(100,255,100));\n"
+                                        "}\n"
+                                        "\n"
+                                        "QPushButton:pressed {\n"
+                                        "    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                        "                                      stop: 0 rgb(100,255,100), stop: 1 #FFD700);\n"
+                                        "}")
         self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_2.addWidget(self.pushButton_3, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_2.addWidget(self.pushButton_3, 0,
+                                          QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_5 = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
         self.label_5.setMinimumSize(QtCore.QSize(75, 0))
         self.label_5.setMaximumSize(QtCore.QSize(75, 16777215))
@@ -180,7 +182,8 @@ class Ui_MainWindow(object):
         self.label_5.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_5.setWordWrap(False)
         self.label_5.setObjectName("label_5")
-        self.horizontalLayout_2.addWidget(self.label_5, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_2.addWidget(self.label_5, 0,
+                                          QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.comboBox = QtWidgets.QComboBox(parent=self.verticalLayoutWidget)
         self.comboBox.setMinimumSize(QtCore.QSize(70, 0))
         self.comboBox.setMaximumSize(QtCore.QSize(70, 16777215))
@@ -189,17 +192,17 @@ class Ui_MainWindow(object):
         font.setPointSize(11)
         self.comboBox.setFont(font)
         self.comboBox.setStyleSheet("QComboBox {\n"
-"    border: 1px solid rgb(100,0,0);\n"
-"    border-radius: 5px;\n"
-"}\n"
-"\n"
-"QComboBox::drop-down {\n"
-"    border-left-width: 1px;\n"
-"    border-left-color: darkgray;\n"
-"    border-left-style: solid;\n"
-"    border-top-right-radius: 5px;\n"
-"    border-bottom-right-radius: 5px;\n"
-"}")
+                                    "    border: 1px solid rgb(100,0,0);\n"
+                                    "    border-radius: 5px;\n"
+                                    "}\n"
+                                    "\n"
+                                    "QComboBox::drop-down {\n"
+                                    "    border-left-width: 1px;\n"
+                                    "    border-left-color: darkgray;\n"
+                                    "    border-left-style: solid;\n"
+                                    "    border-top-right-radius: 5px;\n"
+                                    "    border-bottom-right-radius: 5px;\n"
+                                    "}")
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
@@ -208,7 +211,8 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-        self.horizontalLayout_2.addWidget(self.comboBox, 0, QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_2.addWidget(self.comboBox, 0,
+                                          QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.label_4 = QtWidgets.QLabel(parent=self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(650, 290, 32, 32))
@@ -221,16 +225,16 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.dockWidget = QtWidgets.QDockWidget(parent=MainWindow)
         self.dockWidget.setStyleSheet("QDockWidget > QWidget {\n"
-"    border-right: 5px solid rgb(255, 153, 51);\n"
-"    border-left: 5px solid rgb(255, 153, 51);\n"
-"    border-bottom: 5px solid rgb(255, 153, 51);\n"
-"    border-bottom-right-radius: 20px;\n"
-"    border-bottom-left-radius: 20px;\n"
-"}\n"
-"\n"
-"QDockWidget::title {\n"
-"    background: solid rgb(255, 153, 51);\n"
-"}")
+                                      "    border-right: 5px solid rgb(255, 153, 51);\n"
+                                      "    border-left: 5px solid rgb(255, 153, 51);\n"
+                                      "    border-bottom: 5px solid rgb(255, 153, 51);\n"
+                                      "    border-bottom-right-radius: 20px;\n"
+                                      "    border-bottom-left-radius: 20px;\n"
+                                      "}\n"
+                                      "\n"
+                                      "QDockWidget::title {\n"
+                                      "    background: solid rgb(255, 153, 51);\n"
+                                      "}")
         self.dockWidget.setObjectName("dockWidget")
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
@@ -250,7 +254,8 @@ class Ui_MainWindow(object):
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-        spacerItem = QtWidgets.QSpacerItem(20, 50, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        spacerItem = QtWidgets.QSpacerItem(20, 50, QtWidgets.QSizePolicy.Policy.Minimum,
+                                           QtWidgets.QSizePolicy.Policy.Fixed)
         self.verticalLayout.addItem(spacerItem)
         self.label_2 = QtWidgets.QLabel(parent=self.layoutWidget)
         self.label_2.setMinimumSize(QtCore.QSize(0, 30))
@@ -263,29 +268,31 @@ class Ui_MainWindow(object):
         self.label_2.setWordWrap(False)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 200, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 200, QtWidgets.QSizePolicy.Policy.Minimum,
+                                            QtWidgets.QSizePolicy.Policy.Fixed)
         self.verticalLayout.addItem(spacerItem1)
         self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
         self.pushButton.setMinimumSize(QtCore.QSize(128, 96))
         self.pushButton.setMaximumSize(QtCore.QSize(128, 96))
         self.pushButton.setStyleSheet("QPushButton {\n"
-"    border: 3px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"}")
+                                      "    border: 3px solid rgb(100,0,0);\n"
+                                      "    border-radius: 10px;\n"
+                                      "}")
         self.pushButton.setText("")
         self.pushButton.setIconSize(QtCore.QSize(128, 96))
         self.pushButton.setFlat(False)
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout.addWidget(self.pushButton, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Policy.Minimum,
+                                            QtWidgets.QSizePolicy.Policy.Fixed)
         self.verticalLayout.addItem(spacerItem2)
         self.pushButton_2 = QtWidgets.QPushButton(parent=self.layoutWidget)
         self.pushButton_2.setMinimumSize(QtCore.QSize(160, 80))
         self.pushButton_2.setMaximumSize(QtCore.QSize(160, 80))
         self.pushButton_2.setStyleSheet("QPushButton {\n"
-"    border: 3px solid rgb(100,0,0);\n"
-"    border-radius: 10px;\n"
-"}")
+                                        "    border: 3px solid rgb(100,0,0);\n"
+                                        "    border-radius: 10px;\n"
+                                        "}")
         self.pushButton_2.setText("")
         self.pushButton_2.setIconSize(QtCore.QSize(128, 96))
         self.pushButton_2.setFlat(False)
@@ -322,6 +329,7 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

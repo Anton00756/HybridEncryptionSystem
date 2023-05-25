@@ -1,17 +1,19 @@
 import base64
+import json
 import os
 import time
-from uuid import uuid4
 from typing import Optional, Tuple
+from uuid import uuid4
+
+import requests
 from PyQt6 import QtWidgets, QtCore, QtGui
 from PyQt6.QtCore import QObject, pyqtSignal, QThread
+
+import cryption_algorithms as ca
+import file_encryption as fe
 import variables
 from client.compiled_ui.file_manager import Ui_FileManager
-import requests
-import json
 from cryption_algorithms import RC6
-import file_encryption as fe
-import cryption_algorithms as ca
 from variables import SERVER_ADDRESS
 
 
@@ -119,7 +121,7 @@ class Runner(QObject):
                 raise ValueError("Не удалось получить корректный ответ от сервера!")
             result = json.loads(response.text)
             self.__mode = fe.AggregatorMode(result['mode'])
-            return (None if result['init_vector'] == '' else convert_str(result['init_vector'])),\
+            return (None if result['init_vector'] == '' else convert_str(result['init_vector'])), \
                 convert_str(result['key']), result['tr']
         except requests.ConnectionError:
             raise ValueError("Не удалось подключиться к серверу!")

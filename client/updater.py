@@ -1,8 +1,10 @@
 import json
+
 import requests
 from PyQt6.QtCore import pyqtSignal, Qt, QObject, QTimer
-from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QMovie, QPixmap
+from PyQt6.QtWidgets import QLabel
+
 from variables import SERVER_ADDRESS
 
 
@@ -44,7 +46,11 @@ class UpdateBtn(QLabel):
         self.__block = False
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton and not self.__block:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.update_values()
+
+    def update_values(self):
+        if not self.__block:
             self.__block = True
             self.setMovie(self.__movie)
             self.__movie.start()

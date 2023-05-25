@@ -1,8 +1,10 @@
 import hashlib
 import json
-from PyQt6 import QtWidgets, QtCore, QtGui
-from client.compiled_ui.registration import Ui_Registration
+
 import requests
+from PyQt6 import QtWidgets, QtCore, QtGui
+
+from client.compiled_ui.registration import Ui_Registration
 from variables import SERVER_ADDRESS
 
 
